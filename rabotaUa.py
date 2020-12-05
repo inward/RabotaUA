@@ -30,7 +30,7 @@ def get_work(num_pages):
 def generate_html(ads, page_name):
     payload_text = ''
     for ad in ads:
-        payload_text += f'<a href={ad.url}>{ad.title}</a> [{ad.company}]</br>'
+        payload_text += f'<div class="ad"><a href={ad.url}>{ad.title}</a> [{ad.company}]</div>'
     with open(page_name) as fr, open('pages/index.html', 'w', encoding='utf-8') as fw:
         html_text = fr.read()
         res_html_text = html_text.replace('{{generate_text}}', payload_text)
