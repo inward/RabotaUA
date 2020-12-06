@@ -1,4 +1,5 @@
-import requests
+#import requests
+import grequests
 from bs4 import BeautifulSoup 
 
 
@@ -10,20 +11,43 @@ class Ad():
     def __str__(self):
         return self.title
 
-def get_work(num_pages):
+# def get_work_async(num_pages):
+#     ads = []
+#     for i in range(1, num_pages+1):
+#         url = f'https://rabota.ua/%D1%85%D0%B0%D1%80%D1%8C%D0%BA%D0%BE%D0%B2?pg={i}'
+#         r = requests.get(url)
+#         soup = BeautifulSoup(r.text, 'html.parser')
+#         items = soup.findAll('div', class_='card-main-content')
+#         for item in items:
+#             link_url = item.find('a', class_='ga_listing')
+#             link = 'https://rabota.ua' + link_url.get('href')
+#             title = link_url.get('title')
+#             company_url = item.find('a', class_='company-profile-name')
+#             company = company_url.get('title')
+#             ads.append(Ad(title, link, company))
+#     return ads
+
+def get_work_async(num_pages):
     ads = []
+    urls = []
     for i in range(1, num_pages+1):
         url = f'https://rabota.ua/%D1%85%D0%B0%D1%80%D1%8C%D0%BA%D0%BE%D0%B2?pg={i}'
-        r = requests.get(url)
-        soup = BeautifulSoup(r.text, 'html.parser')
-        items = soup.findAll('div', class_='card-main-content')
-        for item in items:
-            link_url = item.find('a', class_='ga_listing')
-            link = 'https://rabota.ua' + link_url.get('href')
-            title = link_url.get('title')
-            company_url = item.find('a', class_='company-profile-name')
-            company = company_url.get('title')
-            ads.append(Ad(title, link, company))
+        urls.append(url)
+    rs = (grequests.get(u) for u in urls)
+    for r in grequests.map(rs):
+        if r:
+            try:
+                soup = BeautifulSoup(r.text, 'html.parser')
+                items = soup.findAll('div', class_='card-main-content')
+                for item in items:
+                    link_url = item.find('a', class_='ga_listing')
+                    link = 'https://rabota.ua' + link_url.get('href')
+                    title = link_url.get('title')
+                    company_url = item.find('a', class_='company-profile-name')
+                    company = company_url.get('title')
+                    ads.append(Ad(title, link, company))
+            except Exception as ex:
+                print(ex)
     return ads
 
 
@@ -54,11 +78,9 @@ def apply_blacklist(ads):
 
 
 def go():
-    ads = get_work(1)
+    ads = get_work_async(10)
     ads = apply_blacklist(ads)
     generate_html(ads, 'pages/html_template.html')
-
-
 
 
 

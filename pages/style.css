@@ -1,5 +1,5 @@
 body {
-    background: darkslategray;
+    background: #393b54;
 }
 
 #TMpanel {
@@ -16,6 +16,11 @@ body {
     position: relative;
 }
 
+.container-name a{
+    color: black;
+
+}
+
 p {
     margin: 0;
     position: absolute;
@@ -28,3 +33,10 @@ p {
 .ads a {
     color: darkgray;
     font-size: 20px;
+    margin-left: 3px;
+    text-decoration: dotted;
+}
+
+.ad {
+    margin: 3px;
+}
