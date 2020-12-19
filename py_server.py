@@ -2,16 +2,23 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import rabotaUa as rab
 class myHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type','text/html')
-        self.end_headers()
         path = self.path
+        self.send_response(200)
+        if path.endswith('css'):
+            self.send_header('Content-type','text/css')
+            print('css')
+        else:
+            self.send_header('Content-type','text/html')
+        self.end_headers()
         if path == "/":
-            path = "/index"
+            path = "pages/index.html"
+        if path.startswith('/'):
+            path = path[1:]
 
         try:
             rab.go()
-            file  = open("pages"+path + ".html", 'r', encoding='utf-8')
+            file  = open(path, 'r', encoding='utf-8')
+            print(path)
         except FileNotFoundError:
             file  = open("pages/404.html", 'r')
 

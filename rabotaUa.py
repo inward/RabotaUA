@@ -30,8 +30,11 @@ class Ad():
 def get_work_async(num_pages):
     ads = []
     urls = []
+    town = 'покровск'
+    town_url = str(town.encode()).upper().replace('\\X', '%')[2:-1]
     for i in range(1, num_pages+1):
-        url = f'https://rabota.ua/%D1%85%D0%B0%D1%80%D1%8C%D0%BA%D0%BE%D0%B2?pg={i}'
+        #url = f'https://rabota.ua/%D1%85%D0%B0%D1%80%D1%8C%D0%BA%D0%BE%D0%B2?pg={i}'
+        url = f'https://rabota.ua/{town}?pg={i}'
         urls.append(url)
     rs = (grequests.get(u) for u in urls)
     for r in grequests.map(rs):
@@ -78,7 +81,7 @@ def apply_blacklist(ads):
 
 
 def go():
-    ads = get_work_async(10)
+    ads = get_work_async(2)
     ads = apply_blacklist(ads)
     generate_html(ads, 'pages/html_template.html')
 
