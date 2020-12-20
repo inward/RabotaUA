@@ -16,10 +16,10 @@ body {
     position: relative;
 }
 
-.container-name a{
+#logo{
     color: black;
-
 }
+
 
 p {
     margin: 0;
@@ -39,4 +39,8 @@ p {
 
 .ad {
     margin: 3px;
+}
+
+#bl{
+    color: #607d8b1a;
 }

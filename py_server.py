@@ -14,7 +14,9 @@ class myHandler(BaseHTTPRequestHandler):
             path = "pages/index.html"
         if path.startswith('/'):
             path = path[1:]
-
+        if path.startswith('go_to_bl?'):
+            rab.go_to_bl(path.split('?')[1])
+            path = "pages/self_close.html"
         try:
             rab.go()
             file  = open(path, 'r', encoding='utf-8')
